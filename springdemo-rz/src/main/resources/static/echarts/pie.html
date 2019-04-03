@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="/public/libs/jquery.min.js"></script>
+    <script src="/public/plugins/echarts/echarts.min.js"></script>
+    <script type="text/javascript">
+        $(function(){
+            var myEcharts = echarts.init(document.getElementById("myPieContainner"));
+
+            option = {
+                title: {
+                    text: '部门员工统计',
+                    subtext: '2019年3月统计',
+                    left: 'center'
+                },
+                tooltip : {
+                    trigger: 'item',
+                    formatter: "{a} <br/>{b} : {c} ({d}%)"
+                },
+                legend: {
+                    bottom: 10,
+                    left: 'center',
+                    //data: ['西凉', '益州','兖州','荆州','幽州']
+                    data : []
+                },
+                series : [
+                    {
+                        type: 'pie',
+                        radius : '65%',
+                        center: ['50%', '50%'],
+                        selectedMode: 'single',
+                        /*data:[
+                            {value:1548,name: '幽州'},
+                            {value:535, name: '荆州'},
+                            {value:510, name: '兖州'},
+                            {value:634, name: '益州'},
+                            {value:735, name: '西凉'}
+                        ],*/
+                        data : [],
+                        itemStyle: {
+                            emphasis: {
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                        }
+                    }
+                ]
+            };
+            $.get("/sys/echarts/pie",function(r){
+                var legendData = r.legendData;
+                var seriesData = r.seriesData;
+                option.legend.data = legendData;
+                option.series[0].data = seriesData;
+
+                myEcharts.setOption(option);
+            });
+        })
+    </script>
+</head>
+<body>
+
+<!--1，容器-->
+<div style="width: 600px;height: 500px" id="myPieContainner">
+
+</div>
+
+</body>
+</html>
